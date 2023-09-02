@@ -38,11 +38,22 @@ export default function HomePage() {
     <div>
       <XpdcBaner />
       <QuoteCaroselProduct />
-      <CategoryProduct products={products} loading={loading} error={error} />
-      <LineText textLine="FEATURED PRODUCT" line="line" />
-      <ProductsComponent products={sortedProducts} loading={loading} error={error} number={0} />
-      <LineText textLine="NEW ARIVAL" line="line" />
-      <ProductsComponent products={products} loading={loading} error={error} number={0} />
+      {loading ? (
+        <p className="text-center text-success">sedang memuat product...</p>
+      ) : error ? (
+        <p className="text-center text-danger">{error.message}</p>
+      ) : !products && !sortedProducts ? (
+        <p className="text-center text-danger">product tidak di temukan!</p>
+      ) : (
+        <>
+          <CategoryProduct products={products} />
+          <LineText textLine="FEATURED PRODUCT" line="line" />
+          <ProductsComponent products={sortedProducts} number={0} />
+          <LineText textLine="NEW ARIVAL" line="line" />
+          <ProductsComponent products={products} number={0} />
+        </>
+      )}
+
       <FooterBanerComponent />
     </div>
   );

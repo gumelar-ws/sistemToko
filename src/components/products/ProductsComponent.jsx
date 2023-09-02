@@ -2,17 +2,12 @@ import React from 'react';
 import './styleProducts.css';
 import { Link } from 'react-router-dom';
 
-export default function ProductsComponent({ products, loading, error, number }) {
+export default function ProductsComponent({ products, number }) {
   return (
     <div>
       {' '}
       <div className="row p-3">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error.message}</p>
-        ) : (
-          products &&
+        {products &&
           products.slice(0, 4).map((product) => (
             <div className="col-lg-3 col-md-3 col-sm-6 mb-4" key={product.id}>
               <div className="card border-0">
@@ -33,8 +28,7 @@ export default function ProductsComponent({ products, loading, error, number }) 
                 </div>
               </div>
             </div>
-          ))
-        )}
+          ))}
       </div>
     </div>
   );
