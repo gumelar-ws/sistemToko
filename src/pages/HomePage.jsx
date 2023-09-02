@@ -13,7 +13,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   useEffect(() => {
-    const fetchDataId = async () => {
+    const fetchData = async () => {
       try {
         const response = await api.get('/product?page=1&sorting=Lates&categories=all&search_name=none');
         setProducts(response.data.aaData);
@@ -25,12 +25,14 @@ export default function HomePage() {
       }
     };
     return () => {
-      fetchDataId();
+      fetchData();
     };
   }, []);
 
   const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
   const sortedProducts = [...products].sort(sortProductsByDate);
+
+  console.log(sortedProducts);
 
   return (
     <div>

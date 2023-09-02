@@ -29,9 +29,8 @@ export default function DetailProductComponent() {
         setLoading(false);
       }
     };
-    return () => {
-      fetchDataId();
-    };
+
+    fetchDataId();
   }, [name]);
 
   const scrollTop = () => {
