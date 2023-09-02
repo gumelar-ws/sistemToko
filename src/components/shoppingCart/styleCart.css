@@ -1,0 +1,5 @@
+@media (max-width: 992px) {
+  .parent .border-end {
+    border-right: none !important;
+  }
+}

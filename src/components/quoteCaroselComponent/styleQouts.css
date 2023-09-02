@@ -1,0 +1,29 @@
+/* .section-custom {
+  background-color: blue;
+} */
+.section-custom .section-start {
+  position: relative;
+  top: 25%;
+  left: 150px;
+  bottom: 70%;
+  max-width: 400px;
+  max-height: auto;
+}
+.section-start h5 {
+  font-size: xx-large;
+}
+
+@media (max-width: 576px) {
+  .carousel-item .img {
+    height: 70vh;
+    object-fit: cover;
+  }
+  .section-custom .section-start {
+    width: 290px;
+    font-size: 12px;
+    left: 50px;
+  }
+  .section-start h5 {
+    font-size: x-small;
+  }
+}
