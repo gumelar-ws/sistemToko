@@ -42,8 +42,6 @@ export default function Home() {
         <p className="text-center text-success">sedang memuat product...</p>
       ) : error ? (
         <p className="text-center text-danger">{error.message}</p>
-      ) : !products && !sortedProducts ? (
-        <p className="text-center text-danger">product tidak di temukan!</p>
       ) : (
         <>
           <CategoryProduct products={products} />
