@@ -42,14 +42,18 @@ export default function Home() {
         <p className="text-center text-success">sedang memuat product...</p>
       ) : error ? (
         <p className="text-center text-danger">{error.message}</p>
-      ) : (
-        <>
+      ) : products ? (
+        <div>
           <CategoryProduct products={products} />
           <LineText textLine="FEATURED PRODUCT" line="line" />
           <ProductsComponent products={sortedProducts} number={0} />
           <LineText textLine="NEW ARIVAL" line="line" />
           <ProductsComponent products={products} number={0} />
-        </>
+        </div>
+      ) : !products && !sortedProducts ? (
+        <p className="text-center text-danger">product tidak di temukan!</p>
+      ) : (
+        ''
       )}
 
       <FooterBanerComponent />
