@@ -38,7 +38,13 @@ export default function PageHome() {
     <div>
       <XpdcBaner />
       <QuoteCaroselProduct />
-      {loading ? (
+      <h1>
+        update
+        {products.map((dat) => (
+          <p>{dat.name}</p>
+        ))}
+      </h1>
+      {/* {loading ? (
         <p className="text-center text-success">sedang memuat product...</p>
       ) : error ? (
         <p className="text-center text-danger">{error.message}</p>
@@ -54,7 +60,7 @@ export default function PageHome() {
         <p className="text-center text-danger">product tidak di temukan!</p>
       ) : (
         ''
-      )}
+      )} */}
 
       <FooterBanerComponent />
     </div>
