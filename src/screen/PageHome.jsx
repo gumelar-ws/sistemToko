@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
 import QuoteCaroselProduct from '../components/quoteCaroselComponent/QuoteCaroselProduct.jsx';
-import ProductsComponent from '../components/products/ProductsComponent.jsx';
-import LineText from '../components/lineText/LineText.jsx';
-import CategoryProduct from '../components/categoriProduct/CategoryProduct.jsx';
+// import ProductsComponent from '../components/products/ProductsComponent.jsx';
+// import LineText from '../components/lineText/LineText.jsx';
+// import CategoryProduct from '../components/categoriProduct/CategoryProduct.jsx';
 import FooterBanerComponent from '../components/footer/FooterBanerComponent.jsx';
 import XpdcBaner from '../components/navbarComponent/XpdcBaner.jsx';
 import { api } from '../app/actions.js';
 
 export default function PageHome() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await api.get('/product');
         setData(response.data.aaData);
 
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
-        setError(error);
-        setLoading(false);
+        // setError(error);
+        // setLoading(false);
       }
     };
     return () => {
