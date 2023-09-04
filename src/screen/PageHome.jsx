@@ -15,7 +15,7 @@ export default function PageHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/product?page=1&sorting=Lates&categories=all&search_name=none');
+        const response = await api.get('/product');
         setProducts(response.data.aaData);
 
         setLoading(false);
@@ -38,13 +38,13 @@ export default function PageHome() {
     <div>
       <XpdcBaner />
       <QuoteCaroselProduct />
-      <h1>
+      {/* <h1>
         update
         {products.map((dat) => (
           <p>{dat.name}</p>
         ))}
-      </h1>
-      {/* {loading ? (
+      </h1> */}
+      {loading ? (
         <p className="text-center text-success">sedang memuat product...</p>
       ) : error ? (
         <p className="text-center text-danger">{error.message}</p>
@@ -60,7 +60,7 @@ export default function PageHome() {
         <p className="text-center text-danger">product tidak di temukan!</p>
       ) : (
         ''
-      )} */}
+      )}
 
       <FooterBanerComponent />
     </div>
