@@ -1,13 +1,12 @@
-import BtnViewMore from '../components/componentProductList/BtnViewMore';
-
 import React, { useEffect, useState } from 'react';
 
 import { api } from '../app/actions';
 import ProductList from '../components/componentProductList/ProductList';
 import { useNavigate, useParams } from 'react-router-dom';
 import HederPathProductList from '../components/componentProductList/HederPathProductList';
+import BtnViewMore from '../components/componentProductList/BtnViewMore.jsx';
 
-export default function ProdouctList() {
+export default function ProdouctsList() {
   const { sorting, categories, search_name } = useParams();
   const navigate = useNavigate();
 
