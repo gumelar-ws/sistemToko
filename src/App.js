@@ -7,7 +7,8 @@ import Cart from './screen/Cart.jsx';
 import Checkout from './screen/Checkout.jsx';
 import CompletePayment from './screen/CompletePayment.jsx';
 import ProdouctsList from './screen/ProdouctsList.jsx';
-import PageHome from './screen/PageHome.jsx';
+// import PageHome from './screen/PageHome.jsx';
+import Home from './screen/Home.jsx';
 
 const App = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const App = () => {
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<PageHome />} exact />
+          <Route path="/" element={<Home />} />
           <Route path="/product/:sorting/:categories/:search_name" element={<ProdouctsList />} />
           <Route path="/product/:name" element={<Detail />} />
           <Route path="/product/shoppingCart" element={<Cart />} />

@@ -6,7 +6,7 @@ import QuoteCaroselProduct from '../components/quoteCaroselComponent/QuoteCarose
 // import CategoryProduct from '../components/categoriProduct/CategoryProduct.jsx';
 import FooterBanerComponent from '../components/footer/FooterBanerComponent.jsx';
 import XpdcBaner from '../components/navbarComponent/XpdcBaner.jsx';
-import { api } from '../app/actions.js';
+import { api } from '../app/actions';
 
 export default function PageHome() {
   const [data, setData] = useState([]);
