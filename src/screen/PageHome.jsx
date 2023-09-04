@@ -8,7 +8,7 @@ import FooterBanerComponent from '../components/footer/FooterBanerComponent.jsx'
 import XpdcBaner from '../components/navbarComponent/XpdcBaner.jsx';
 import { api } from '../app/actions.js';
 
-export default function Home() {
+export default function PageHome() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
