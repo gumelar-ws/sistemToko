@@ -9,14 +9,14 @@ import XpdcBaner from '../components/navbarComponent/XpdcBaner.jsx';
 import { api } from '../app/actions.js';
 
 export default function PageHome() {
-  const [products, setProducts] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await api.get('/product');
-        setProducts(response.data.aaData);
+        setData(response.data.aaData);
 
         setLoading(false);
       } catch (error) {
@@ -29,22 +29,22 @@ export default function PageHome() {
     };
   }, []);
 
-  const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
-  const sortedProducts = [...products].sort(sortProductsByDate);
+  // const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
+  // const sortedProducts = [...products].sort(sortProductsByDate);
 
-  console.log(sortedProducts);
+  console.log(data);
 
   return (
     <div>
       <XpdcBaner />
       <QuoteCaroselProduct />
-      {/* <h1>
+      <h1>
         update
-        {products.map((dat) => (
+        {data.map((dat) => (
           <p>{dat.name}</p>
         ))}
-      </h1> */}
-      {loading ? (
+      </h1>
+      {/* {loading ? (
         <p className="text-center text-success">sedang memuat product...</p>
       ) : error ? (
         <p className="text-center text-danger">{error.message}</p>
@@ -60,7 +60,7 @@ export default function PageHome() {
         <p className="text-center text-danger">product tidak di temukan!</p>
       ) : (
         ''
-      )}
+      )} */}
 
       <FooterBanerComponent />
     </div>
