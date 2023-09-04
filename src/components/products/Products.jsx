@@ -2,7 +2,7 @@ import React from 'react';
 import './styleProducts.css';
 import { Link } from 'react-router-dom';
 
-export default function ProductsComponent({ products, number }) {
+export default function Products({ products, number }) {
   return (
     <div>
       {' '}

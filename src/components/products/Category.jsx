@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function CategoryProduct({ products }) {
+export default function Category({ products }) {
   return (
     <div>
       <div className="row p-3">
