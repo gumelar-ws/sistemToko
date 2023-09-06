@@ -6,7 +6,7 @@ export default function Checkout() {
   return (
     <div>
       <div className="container">
-        <HederPathProductList content1="SHOPPING CART" content2="CHECKOUT DETAILS" content2Style="fw-bold" content3="PAYMENT COMPLATE" content4Style="d-none" content5Style="d-none" />
+        <HederPathProductList content1="SHOPPING CART" content2="CHECKOUT DETAILS" content2Style="fw-bold" content3="PAYMENT COMPLATE" content4Style="d-none" content5Style="d-none" display="d-none" />
         <CheckoutDetailsComponent />
       </div>
     </div>

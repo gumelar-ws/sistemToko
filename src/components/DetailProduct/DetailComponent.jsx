@@ -217,7 +217,7 @@ export default function DetailComponent() {
           <div className="container">
             <div className="related-products">
               <h5 className="text-center">RELATED PRODUCTS</h5>
-              <div className="row ">
+              <div className="row  ">
                 <RelateProduct relatedProducts={relatedProducts} scrollTop={scrollTop} />
               </div>
             </div>

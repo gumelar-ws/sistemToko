@@ -1,6 +1,6 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function FooterComponent() {
+export default function FooterComponent({ config, user }) {
   const currentYear = new Date().getFullYear();
   return (
     <div>
@@ -11,19 +11,19 @@ export default function FooterComponent() {
             <h5>Help</h5>
             <ul className="list-unstyled">
               <li>
-                <a className="text-dark" href="/">
+                <Link className="text-dark" to="/hijja/faq">
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-dark" href="/">
-                  Support
-                </a>
+                <Link className="text-dark" to="/hijja/caraPembelian">
+                  Cara Pembelian
+                </Link>
               </li>
               <li>
-                <a className="text-dark" href="/">
-                  Terms of Use
-                </a>
+                <Link className="text-dark" to="/hijja/konfirmasiPembayaran">
+                  Konfirmasi Pembayaran{' '}
+                </Link>
               </li>
             </ul>
           </div>
@@ -31,19 +31,19 @@ export default function FooterComponent() {
             <h5>About</h5>
             <ul className="list-unstyled">
               <li>
-                <a className="text-dark" href="/">
-                  Company
-                </a>
+                <Link className="text-dark" to="/hijja/about">
+                  Tentang Hijja
+                </Link>
               </li>
               <li>
                 <a className="text-dark" href="/">
-                  Mission
+                  Pengembalian dan penukaran
                 </a>
               </li>
               <li>
-                <a className="text-dark" href="/">
-                  Team
-                </a>
+                <Link className="text-dark" to="/hijja/syaratDanKetentuan">
+                  Syarat & Ketentuan
+                </Link>
               </li>
             </ul>
           </div>
@@ -51,18 +51,12 @@ export default function FooterComponent() {
             <h5>Contact Us</h5>
             <address>
               <p>
-                Email:{' '}
-                <a className="text-dark" href="mailto:info@example.com">
-                  info@example.com
-                </a>
+                Email: <a href="mailto:info@example.com">{user.email ? user.email : 'hijja@example.com'}</a>
               </p>
               <p>
-                Phone:{' '}
-                <a className="text-dark" href="tel:+123456789">
-                  +123456789
-                </a>
+                Phone: <a href="tel:+123456789">{config && config.config_contact}</a>
               </p>
-              <p>Address: 123 Street, City</p>
+              <p>Address: {config && config.config_address}</p>
             </address>
           </div>
         </div>

@@ -3,7 +3,7 @@ import './styleCart.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function CartComponent() {
+export default function CartComponent({ totalPrice, totalCart }) {
   const dispatch = useDispatch();
   const [subTotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
@@ -18,15 +18,6 @@ export default function CartComponent() {
     return item.price.replace(/\./g, '');
   }
 
-  // let vocerPricePersent = 0.3;
-  // let subTotalPrice = listCart.reduce((a, p) => {
-  //   let b = 0;
-  //   if (vocer === 'ABCD') {
-  //     const x = parseInt(formatStringPrice(p));
-  //     b += x * vocerPricePersent * p.quantity;
-  //   }
-  //   return a + b;
-  // }, 0);
   let vocerPricePercentage = 0.21;
   let subTotalPrice = listCart.reduce((a, p) => {
     const x = parseInt(formatStringPrice(p)) * p.quantity;
@@ -38,6 +29,11 @@ export default function CartComponent() {
     setTotal(subTotalPrice);
     setHemat('');
   }, [subTotalPrice]);
+
+  useEffect(() => {
+    localStorage.removeItem('total');
+    localStorage.setItem('total', JSON.stringify(formatNumberWithCommas(total)));
+  }, [total]);
 
   const handelVocer = (e) => {
     setVocer(e.target.value);
@@ -68,6 +64,7 @@ export default function CartComponent() {
 
   const removeCartHandler = (item) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+    localStorage.removeItem('total');
   };
 
   return (

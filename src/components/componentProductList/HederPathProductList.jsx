@@ -1,11 +1,30 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function HederPathProductList({ content1, content2, content3, content4, content5, content1Style, content2Style, content3Style, content4Style, content5Style, from, to, total, value, categories, search_name, setPages }) {
+export default function HederPathProductList({
+  content1,
+  content2,
+  content3,
+  content4,
+  content5,
+  content1Style,
+  content2Style,
+  content3Style,
+  content4Style,
+  content5Style,
+  from,
+  to,
+  total,
+  value,
+  categories,
+  search_name,
+  setPages,
+  display,
+}) {
   const navigate = useNavigate();
   const handelChange = (e) => {
     const newSorting = e.target.value;
-    setPages(1)
+    setPages(1);
     navigate(`/product/${newSorting}/${categories}/${search_name}`);
   };
   return (
@@ -20,7 +39,7 @@ export default function HederPathProductList({ content1, content2, content3, con
             <span className={content5Style}>&#47; {content5} </span>
           </div>
         </div>
-        <div className="col d-flex justify-content-end me-5">
+        <div className={`col d-flex justify-content-end me-5 ${display}`}>
           <span className="me-3">{`Showing ${from}-${to} of ${total} return`}</span>
           <div className=" me-4">
             <select value={value} onChange={handelChange}>

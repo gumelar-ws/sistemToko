@@ -35,69 +35,79 @@
   font-weight: bold;
 } */
 /* relate product */
+
+.img-custom {
+  width: 20rem !important ;
+  height: auto !important;
+}
 .card-categori {
-  font-size: 0.7em;
+  font-size: 0.8em;
   line-height: 0.9em;
 }
 .card-title {
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-weight: normal;
   line-height: 0.9em;
 }
 .card-price {
-  line-height: 0.9em;
+  line-height: 1em;
 }
 .card-price-discount {
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 .card-price-fix {
   font-size: 0.8em;
 }
+
 @media (max-width: 992px) {
   .carousel-inner .img-ditail {
     height: auto;
   }
   .card-categori {
-    font-size: 0.7em;
+    font-size: 0.8em;
     line-height: 0.9em;
   }
   .card-title {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: normal;
     line-height: 0.9em;
   }
   .card-price {
-    line-height: 0.9em;
+    line-height: 1em;
   }
   .card-price-discount {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
   .card-price-fix {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 }
 @media (max-width: 567px) {
+  .img-custom {
+    width: 12rem !important ;
+    height: auto !important;
+  }
   .carousel-inner .img-ditail {
     width: 100%;
     height: auto;
   }
   .card-categori {
-    font-size: 0.7em;
+    font-size: 0.8em;
     line-height: 0.9em;
   }
   .card-title {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: normal;
     line-height: 0.9em;
   }
   .card-price {
-    line-height: 0.9em;
+    line-height: 1em;
   }
   .card-price-discount {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
   .card-price-fix {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 }
 
