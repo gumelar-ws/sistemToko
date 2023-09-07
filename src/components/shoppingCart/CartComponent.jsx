@@ -3,13 +3,13 @@ import './styleCart.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function CartComponent({ totalPrice, totalCart }) {
+export default function CartComponent({ setTotals }) {
   const dispatch = useDispatch();
+  const listCart = useSelector((state) => state.cart.cart.cartItems);
   const [subTotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [vocer, setVocer] = useState('');
   const [hemat, setHemat] = useState('');
-  const listCart = useSelector((state) => state.cart.cart.cartItems);
 
   function formatNumberWithCommas(number) {
     return number.toLocaleString('id-ID');
@@ -27,13 +27,11 @@ export default function CartComponent({ totalPrice, totalCart }) {
   useEffect(() => {
     setSubtotal(subTotalPrice);
     setTotal(subTotalPrice);
-    setHemat('');
   }, [subTotalPrice]);
 
   useEffect(() => {
-    localStorage.removeItem('total');
-    localStorage.setItem('total', JSON.stringify(formatNumberWithCommas(total)));
-  }, [total]);
+    setTotals(formatNumberWithCommas(total));
+  }, [setTotals, total]);
 
   const handelVocer = (e) => {
     setVocer(e.target.value);
@@ -46,6 +44,7 @@ export default function CartComponent({ totalPrice, totalCart }) {
       discountPrice = subTotalPrice * vocerPricePercentage;
       discoun = subTotalPrice - discountPrice;
       setHemat(`hemat ${vocerPricePercentage * 100}%`);
+
       setTotal(discoun);
     } else {
       setHemat('');
@@ -64,7 +63,6 @@ export default function CartComponent({ totalPrice, totalCart }) {
 
   const removeCartHandler = (item) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
-    localStorage.removeItem('total');
   };
 
   return (

@@ -69,9 +69,6 @@ export default function ProdouctsList() {
     setPages(pages + 1);
   };
 
-  console.log('page', pages);
-  console.log('page', products);
-
   return (
     <div>
       {loading ? (

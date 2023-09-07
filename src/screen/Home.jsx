@@ -7,6 +7,7 @@ import Products from '../components/products/Products';
 import Category from '../components/products/Category';
 
 export default function Home() {
+  window.scrollTo({ top: 0 });
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -22,13 +23,14 @@ export default function Home() {
         setError(error);
       }
     };
-    data();
+    return () => {
+      data();
+    };
   }, []);
 
   const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
   const sortedProducts = [...products].sort(sortProductsByDate);
 
-  console.log(products);
   return (
     <div>
       <XpdcBaner />

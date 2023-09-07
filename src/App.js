@@ -19,11 +19,11 @@ import SyaratDanKetentuan from './screen/about/SyaratDanKetentuan.jsx';
 
 const App = () => {
   const location = useLocation();
-  window.scrollTo({ top: 0 });
 
   const [config, setConfig] = useState({});
   const [user, setUser] = useState({});
   const [pages, setPages] = useState([]);
+  const [totals, setTotals] = useState(0);
   useEffect(() => {
     const fetchWeb = async () => {
       try {
@@ -33,17 +33,13 @@ const App = () => {
         setConfig(response.data.config);
         setUser(response.data.user);
         setPages(response.data.pages);
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
     };
-    return () => {
-      fetchWeb();
-    };
-  }, []);
 
-  const totals = JSON.parse(localStorage.getItem('total'));
+    fetchWeb();
+  }, []);
 
   const isShoppingCartPage = location.pathname === '/product/shoppingCart' || location.pathname === '/product/checkout-detail';
 
@@ -57,7 +53,7 @@ const App = () => {
           <Route path="/" element={<Home />} exact />
           <Route path="/product/:sorting/:categories/:search_name" element={<ProdouctsList />} />
           <Route path="/product/:name" element={<Detail />} />
-          <Route path="/product/shoppingCart" element={<Cart />} />
+          <Route path="/product/shoppingCart" element={<Cart setTotals={setTotals} />} />
           <Route path="/product/checkout-detail" element={<Checkout />} />
           <Route path="/product/payment-complite" element={<CompletePayment />} />
           <Route path="/hijja/about" element={<About page={pages} />} />

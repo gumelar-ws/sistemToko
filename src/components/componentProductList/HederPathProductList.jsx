@@ -30,7 +30,7 @@ export default function HederPathProductList({
   return (
     <div>
       <div className="row ms-0  mt-3 mb-5 w-100">
-        <div className="col text-start">
+        <div className="col-sm-6 text-start">
           <div className="mt-2 mb-2 text-dark">
             <span className={content1Style}>{content1} </span>
             <span className={content2Style}>&#47; {content2} </span>
@@ -39,7 +39,7 @@ export default function HederPathProductList({
             <span className={content5Style}>&#47; {content5} </span>
           </div>
         </div>
-        <div className={`col d-flex justify-content-end me-5 ${display}`}>
+        <div className={`col d-flex justify-content-end justify  me-5 me-sm-0 ms-sm-0 ${display}`}>
           <span className="me-3">{`Showing ${from}-${to} of ${total} return`}</span>
           <div className=" me-4">
             <select value={value} onChange={handelChange}>
