@@ -9,7 +9,7 @@ export default function Products({ products, number }) {
       <div className="row p-3">
         {products &&
           products.slice(0, 4).map((product) => (
-            <div className=" col-6 col-lg-3 col-md-3 col-sm-6 mb-4" key={product.id}>
+            <div className=" col-6 col-lg-3 col-md-3  mb-4" key={product.id}>
               <div className="card border-0">
                 <Link to={`/product/${product.name}`}>
                   <img src={product.childs[number].photo} className="card-img-top" alt={product.name} />

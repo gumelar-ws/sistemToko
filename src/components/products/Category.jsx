@@ -7,7 +7,7 @@ export default function Category({ products }) {
       <div className=" p-3 position-relative w-auto d-flex overflow-x-scroll">
         {products &&
           products.map((product) => (
-            <div className=" mb-4 me-2" key={product.id}>
+            <div className="me-2 mb-4" key={product.id}>
               <Link to={`product/Lates/${product.keywords[0].id}/none`}>
                 <div className="card">
                   <img src={product.photo} className="card-img-top img-custom" alt={product.name} />
