@@ -125,6 +125,7 @@ export default function DetailComponent() {
     };
     fetchMetchData();
   }, [selectedKeywordId]);
+  console.log(detailProduct);
 
   return (
     <div>

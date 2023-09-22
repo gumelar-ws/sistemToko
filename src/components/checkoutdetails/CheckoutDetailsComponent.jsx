@@ -4,17 +4,22 @@ import TotalDetail from './TotalDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { isValidEmail } from './ValidasiInput';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckoutDetailsComponent() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const listCart = useSelector((state) => state.cart.cart.cartItems);
+  if (!listCart) {
+    navigate('/product/:sorting/:categories/:search_name');
+  }
   const [province, setProvince] = useState([]);
   const [provinceId, setProvinceId] = useState(0);
   const [city, setCity] = useState([]);
   const [cityId, setCityId] = useState(0);
   const [subdistrict, setSubdistrict] = useState([]);
   const [subdistrictId, setSubdistrictId] = useState(0);
-  const [weight, setWeight] = useState('200');
+  const [weight, setWeight] = useState(200);
   const [adressIdAsal, setAdressIdAsal] = useState(0);
   const [ongkir, setOngkir] = useState([]);
 
@@ -26,8 +31,9 @@ export default function CheckoutDetailsComponent() {
     detail: '',
   });
 
+  const data = JSON.stringify(listCart);
   const [dataPost, setDataPost] = useState({
-    order_json: listCart,
+    order_json: data,
     permalink: '',
     customer_email: '',
     customer_name: '',
@@ -164,11 +170,9 @@ export default function CheckoutDetailsComponent() {
     if (!listCart) {
       return;
     }
-    const totalWeight = listCart
-      ?.reduce((total, item) => {
-        return item['product_weight'] * 1 + total;
-      }, 0)
-      .toFixed(3);
+    const totalWeight = listCart?.reduce((total, item) => {
+      return item['product_weight'] * 1 + total;
+    }, 0);
     setWeight(totalWeight);
   }, [listCart]);
 
@@ -209,7 +213,7 @@ export default function CheckoutDetailsComponent() {
       if (subdistrictId === 0) {
         return;
       } else {
-        const res = await apiLocation.get(`/ongkir?id=${adressIdAsal}&destination=${subdistrictId}&weight=${weight}`);
+        const res = await apiLocation.get(`/ongkir?id=${adressIdAsal}&destination=${subdistrictId}&weight=${weight ? weight : 200}`);
         const dat = await res.data;
         setOngkir(dat.data);
       }
@@ -231,15 +235,16 @@ export default function CheckoutDetailsComponent() {
       if (isValid) {
         const response = await axios.post('https://hijja.sistemtoko.com/public/hijja/web_order', data, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' } });
 
-        const res = JSON.stringify(response);
-        console.log('Respon:', res.data);
+        console.log('Respon:', response.data);
         dispatch({ type: 'CART_CLEAR' });
-        // window.location.href = `https://hijja.sistemtoko.com/i/${response.data.order_code}`;
+        window.location.href = `https://hijja.sistemtoko.com/i/${response.data.order_code}`;
       }
     } catch (error) {
       console.error('Kesalahan:', error);
     }
   };
+
+  console.log(weight);
 
   return (
     <div>

@@ -73,7 +73,6 @@ export default function Home() {
     f();
   }, [cat]);
 
-  console.log('fst', featured);
   // const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
   // const sortedProducts = [...products].sort(sortProductsByDate);
 

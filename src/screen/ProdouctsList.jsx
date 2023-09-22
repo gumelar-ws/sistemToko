@@ -68,7 +68,7 @@ export default function ProdouctsList() {
   const loadMore = () => {
     setPages(pages + 1);
   };
-
+console.log(products)
   return (
     <div>
       {loading ? (
