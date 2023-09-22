@@ -95,22 +95,21 @@ export default function DetailComponent() {
   const cart = useSelector((state) => state.cart.cart);
 
   const handleAddToCart = async () => {
-    const existItem = cart.cartItems.find((x) => x.id === selectedProduct.id);
-    const quantity = existItem ? existItem.quantity + count : 1;
+    const existItem = cart.cartItems.find((x) => x.product_id === selectedProduct.id);
+    const product_qty = existItem ? existItem.product_qty + count : 1;
     const newData = {
-      id: selectedProduct.id,
-      name: selectedProduct.name,
-      currency: selectedProduct.currency,
-      photo: selectedProduct.photo,
-      description: selectedProduct.description,
-      price: selectedProduct.price,
-      stock: selectedProduct.stock,
+      product_id: selectedProduct.id,
+      product_name: selectedProduct.name,
+      product_image: selectedProduct.photo,
+      product_price: selectedProduct.price,
+      product_stock: selectedProduct.stock,
+      product_weight: selectedProduct.weight,
     };
-    if (selectedProduct.stock < quantity) {
+    if (selectedProduct.stock < product_qty) {
       window.alert('Sorry gays product habis !');
       return;
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...newData, quantity } });
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...newData, product_qty } });
 
     navigate('/product/shoppingCart');
   };

@@ -15,12 +15,12 @@ export default function CartComponent({ setTotals }) {
     return number.toLocaleString('id-ID');
   }
   function formatStringPrice(item) {
-    return item.price.replace(/\./g, '');
+    return item.product_price.replace(/\./g, '');
   }
 
   let vocerPricePercentage = 0.21;
   let subTotalPrice = listCart.reduce((a, p) => {
-    const x = parseInt(formatStringPrice(p)) * p.quantity;
+    const x = parseInt(formatStringPrice(p)) * p.product_qty;
     return a + x;
   }, 0);
 
@@ -52,13 +52,13 @@ export default function CartComponent({ setTotals }) {
     }
   };
 
-  const updateCartHandler = async (item, quantity) => {
-    if (item.stock < quantity) {
+  const updateCartHandler = async (item, product_qty) => {
+    if (item.product_stock < product_qty) {
       window.alert('Sorry, Product is out of stock');
       return;
     }
 
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, product_qty } });
   };
 
   const removeCartHandler = (item) => {
@@ -79,30 +79,28 @@ export default function CartComponent({ setTotals }) {
           <div className="pe-3">
             {listCart &&
               listCart.map((list) => {
-                const totalCount = formatNumberWithCommas(parseInt(formatStringPrice(list)) * list.quantity);
+                const totalCount = formatNumberWithCommas(parseInt(formatStringPrice(list)) * list.product_qty);
                 return (
-                  <div key={list.id} className="row  d-flex align-items-center mb-3 pb-3 border-bottom border-2">
+                  <div key={list.product_id} className="row  d-flex align-items-center mb-3 pb-3 border-bottom border-2">
                     <div className="col text-truncate">
                       <span className="pe-1 ms-0" style={{ cursor: 'pointer' }} onClick={() => removeCartHandler(list)}>
                         <i className=" bi bi-x-circle fs-5 fw-bold text-secondary "></i>
                       </span>
-                      <img src={list.photo} alt={list.name} style={{ width: '80px', height: '80px' }} />
-                      <span className="ps-1">{list.name}</span>
+                      <img src={list.product_image} alt={list.product_name} style={{ width: '80px', height: '80px' }} />
+                      <span className="ps-1">{list.product_name}</span>
                     </div>
                     <div className="col-3">
                       <div className="d-flex">
-                        <button className="ps-2 pe-2" onClick={() => updateCartHandler(list, list.quantity - 1)} disabled={list.quantity === 1}>
+                        <button className="ps-2 pe-2" onClick={() => updateCartHandler(list, list.product_qty - 1)} disabled={list.product_qty === 1}>
                           -
                         </button>
-                        <span className="ps-2 pe-2">{list.quantity}</span>
-                        <button className="ps-2 pe-2" onClick={() => updateCartHandler(list, list.quantity + 1)} disabled={list.quantity === list.stock}>
+                        <span className="ps-2 pe-2">{list.product_qty}</span>
+                        <button className="ps-2 pe-2" onClick={() => updateCartHandler(list, list.product_qty + 1)} disabled={list.product_qty === list.product_stock}>
                           +
                         </button>
                       </div>
                     </div>
-                    <div className="col-3 fs-6 fw-bold">
-                      {list.currency} {totalCount}
-                    </div>
+                    <div className="col-3 fs-6 fw-bold">Rp.{totalCount}</div>
                   </div>
                 );
               })}
@@ -126,7 +124,7 @@ export default function CartComponent({ setTotals }) {
             <div className="border-bottom border-1 mb-3 pb-2">
               <div className="row">
                 <div className="col-9">Sub total :</div>
-                <div className="col-3 fw-bold">Rp {formatNumberWithCommas(subTotal)}</div>
+                <div className="col-3 fw-bold">Rp{formatNumberWithCommas(subTotal)}</div>
               </div>
             </div>
             <div className="border-bottom border-1 mb-3 pb-2">

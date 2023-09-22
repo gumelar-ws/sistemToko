@@ -9,13 +9,13 @@ const cartReducer = (state = initialState, action) => {
     case 'CART_ADD_ITEM':
       //add to cart
       const newItem = action.payload;
-      const existItem = state.cart.cartItems.find((item) => item.id === newItem.id);
-      const cartItems = existItem ? state.cart.cartItems.map((item) => (item.id === existItem.id ? newItem : item)) : [...state.cart.cartItems, newItem];
+      const existItem = state.cart.cartItems.find((item) => item.product_id === newItem.product_id);
+      const cartItems = existItem ? state.cart.cartItems.map((item) => (item.product_id === existItem.product_id ? newItem : item)) : [...state.cart.cartItems, newItem];
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     // remove cart
     case 'CART_REMOVE_ITEM': {
-      const cartItems = state.cart.cartItems.filter((item) => item.id !== action.payload.id);
+      const cartItems = state.cart.cartItems.filter((item) => item.product_id !== action.payload.product_id);
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }

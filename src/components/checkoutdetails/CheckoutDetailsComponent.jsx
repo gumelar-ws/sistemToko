@@ -1,7 +1,246 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { api, apiLocation } from '../../app/actions';
+import TotalDetail from './TotalDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { isValidEmail } from './ValidasiInput';
+import axios from 'axios';
 
 export default function CheckoutDetailsComponent() {
+  const dispatch = useDispatch();
+  const listCart = useSelector((state) => state.cart.cart.cartItems);
+  const [province, setProvince] = useState([]);
+  const [provinceId, setProvinceId] = useState(0);
+  const [city, setCity] = useState([]);
+  const [cityId, setCityId] = useState(0);
+  const [subdistrict, setSubdistrict] = useState([]);
+  const [subdistrictId, setSubdistrictId] = useState(0);
+  const [weight, setWeight] = useState('200');
+  const [adressIdAsal, setAdressIdAsal] = useState(0);
+  const [ongkir, setOngkir] = useState([]);
+
+  const [namaDepan, setNamaDepan] = useState('');
+  const [namaBelakang, setNamaBelakang] = useState('');
+
+  const [deliveryAddress, setDeliveryAddress] = useState({
+    regrency: '',
+    detail: '',
+  });
+
+  const [dataPost, setDataPost] = useState({
+    order_json: listCart,
+    permalink: '',
+    customer_email: '',
+    customer_name: '',
+    customer_phone: '',
+    customer_wa: '',
+    customer_line: '',
+    delivery_from_name: '',
+    delivery_phone: '',
+    delivery_province: 0,
+    delivery_city: 0,
+    delivery_district: 0,
+    delivery_address: '',
+    sale_keterangan: '',
+    expedition: '',
+    voucher: '',
+    expedition_code: '',
+    expedition_service: '',
+    expedition_weight: '',
+    use_expedition_setting: 1,
+    kode_voucher: '',
+  });
+
+  const [inputValidation, setInputValidation] = useState({
+    customer_email: true,
+    customer_name: true,
+    customer_phone: true,
+    delivery_from_name: true,
+    delivery_phone: true,
+    delivery_province: true,
+    delivery_city: true,
+    delivery_district: true,
+    delivery_address: true,
+    expedition_code: true,
+    expedition_service: true,
+    expedition_weight: true,
+  });
+
+  const [errorMessage, setErrorMessage] = useState({
+    customer_email: '',
+    customer_name: '',
+    customer_phone: '',
+    delivery_from_name: '',
+    delivery_phone: '',
+    delivery_province: '',
+    delivery_city: '',
+    delivery_district: '',
+    delivery_address: '',
+    expedition_code: '',
+    expedition_service: '',
+    expedition_weight: '',
+  });
+
+  const validateInputs = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!dataPost.customer_email) {
+      isValid = false;
+      errors.customer_email = 'Email harus diisi.';
+    } else if (!isValidEmail(dataPost.customer_email)) {
+      isValid = false;
+      errors.customer_email = 'Email tidak valid.';
+    } else {
+      errors.customer_email = '';
+    }
+
+    if (!dataPost.customer_name) {
+      isValid = false;
+      errors.customer_name = 'Nama pelanggan harus diisi.';
+    } else {
+      errors.customer_name = '';
+    }
+
+    if (!dataPost.customer_phone) {
+      isValid = false;
+      errors.customer_phone = 'Nomor telepon harus diisi.';
+    } else {
+      errors.customer_phone = '';
+    }
+
+    setInputValidation({
+      ...inputValidation,
+      customer_email: isValid,
+      customer_name: isValid,
+      customer_phone: isValid,
+    });
+
+    setErrorMessage(errors);
+
+    return isValid;
+  };
+
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const res = await apiLocation.get('/province');
+        setProvince(res.data);
+      } catch (error) {
+        console.log('get province', error);
+      }
+    };
+
+    getLocation();
+
+    const adressTokoId = async () => {
+      try {
+        const res = await api.get(`/website`);
+        const resId = await res.data.data.config;
+        const toko = await res.data.data.user;
+
+        setAdressIdAsal(resId.config_user_id);
+        setDataPost((prevData) => ({
+          ...prevData,
+          permalink: toko.user_permalink,
+        }));
+      } catch (error) {
+        console.log('get web info user adres id ', error);
+      }
+    };
+
+    adressTokoId();
+  }, []);
+
+  useEffect(() => {
+    setDataPost((prevData) => ({
+      ...prevData,
+      customer_name: namaDepan + ' ' + namaBelakang,
+      delivery_from_name: namaDepan + ' ' + namaBelakang,
+      delivery_address: deliveryAddress.regrency + ' ,' + deliveryAddress.detail,
+    }));
+  }, [namaDepan, namaBelakang, deliveryAddress]);
+
+  useEffect(() => {
+    if (!listCart) {
+      return;
+    }
+    const totalWeight = listCart
+      ?.reduce((total, item) => {
+        return item['product_weight'] * 1 + total;
+      }, 0)
+      .toFixed(3);
+    setWeight(totalWeight);
+  }, [listCart]);
+
+  useEffect(() => {
+    const getCity = async () => {
+      if (provinceId === 0) {
+        return;
+      } else {
+        try {
+          const res = await apiLocation.get(`/city/${provinceId}`);
+          setCity(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    getCity();
+  }, [provinceId]);
+
+  useEffect(() => {
+    const getSubDistrict = async () => {
+      if (cityId === 0) {
+        return;
+      } else {
+        try {
+          const res = await apiLocation.get(`/subdistrict?id=${cityId}`);
+          setSubdistrict(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    getSubDistrict();
+  }, [cityId]);
+
+  useEffect(() => {
+    const cekOngkir = async () => {
+      if (subdistrictId === 0) {
+        return;
+      } else {
+        const res = await apiLocation.get(`/ongkir?id=440&destination=${subdistrictId}&weight=${weight}`);
+        const dat = await res.data;
+        setOngkir(dat.data);
+      }
+    };
+    cekOngkir();
+  }, [subdistrictId, weight]);
+
+  // useEffect(() => {
+  //     }, []);
+  // console.log('ongkir', ongkir);
+  console.log('data', dataPost);
+  // console.log('tes', tes);
+
+  const handleFormSubmit = async () => {
+    try {
+      const isValid = validateInputs();
+      const data = JSON.stringify(dataPost);
+      console.log('v', data);
+      if (isValid) {
+        const response = await axios.post('https://hijja.sistemtoko.com/public/hijja/web_order', data, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' } });
+
+        const res = JSON.stringify(response);
+        console.log('Respon:', res.data);
+        dispatch({ type: 'CART_CLEAR' });
+        // window.location.href = `https://hijja.sistemtoko.com/i/${response.data.order_code}`;
+      }
+    } catch (error) {
+      console.error('Kesalahan:', error);
+    }
+  };
+
   return (
     <div>
       <div className="row">
@@ -11,66 +250,74 @@ export default function CheckoutDetailsComponent() {
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="email" className="form-label position-relative fw-bold">
+                  <label htmlFor="email" className="form-label position-relative fw-bold">
                     Email address <span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="email" className="form-control rounded-0 shadow-none " id="email" placeholder="name@example.com" />
+                  <input
+                    type="email"
+                    className={`form-control rounded-0 shadow-none ${!inputValidation.customer_email ? 'border border-danger' : ''}`}
+                    id="email"
+                    onChange={(e) => setDataPost({ ...dataPost, customer_email: e.target.value })}
+                    placeholder="name@example.com"
+                    required
+                  />
+                  {!inputValidation.customer_email ? <p className="text-danger">{errorMessage.customer_email}</p> : ''}
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="first" className="form-label position-relative fw-bold">
+                  <label htmlFor="first" className="form-label position-relative fw-bold">
                     First Name <span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="first" placeholder="Nama depan" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="first" onChange={(e) => setNamaDepan(e.target.value)} placeholder="Nama depan" required />
                 </div>
               </div>
               <div className="col ">
                 <div className="mb-3">
-                  <label for="last" className="form-label position-relative fw-bold">
+                  <label htmlFor="last" className="form-label position-relative fw-bold">
                     Last Name <span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="last" placeholder="Nama Belakang" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="last" onChange={(e) => setNamaBelakang(e.target.value)} placeholder="Nama Belakang" required />
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="compani" className="form-label position-relative fw-bold">
+                  <label htmlFor="compani" className="form-label position-relative fw-bold">
                     Company name(Opsional)
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="compani" placeholder="Sisko" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="compani" value={dataPost.permalink} placeholder="Sisko" required disabled />
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="region" className="form-label position-relative fw-bold">
+                  <label htmlFor="region" className="form-label position-relative fw-bold">
                     Region / Country<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="region" placeholder="Indonesia" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="region" value="Indonesia" placeholder="Indonesia" disabled />
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="street" className="form-label position-relative fw-bold">
+                  <label htmlFor="street" className="form-label position-relative fw-bold">
                     Street address<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none " id="street" placeholder="Jakarta Regrency" />
+                  <input type="text" className="form-control rounded-0 shadow-none " id="street" placeholder="Jakarta Regrency" onChange={(e) => setDeliveryAddress({ ...deliveryAddress, regrency: e.target.value })} />
                 </div>
               </div>
               <div className="col ">
                 <div className="mb-3">
-                  <label for="street2" className="form-label position-relative opacity-0 ">
+                  <label htmlFor="street2" className="form-label position-relative opacity-0 ">
                     Setreet Adress<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="street2" placeholder="Apartement,suite,unit(opsional)" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="street2" placeholder="Apartement,suite,unit(opsional)" onChange={(e) => setDeliveryAddress({ ...deliveryAddress, detail: e.target.value })} />
                 </div>
               </div>
             </div>
@@ -79,13 +326,26 @@ export default function CheckoutDetailsComponent() {
                 <div className=" position-relative fw-bold mb-2 ">
                   Provinsis <span className="position-absolute text-danger">*</span>
                 </div>
-                <div class="input-group mb-3  ">
-                  <select class="form-select rounded-0 shadow-none" id="inputGroupSelect01">
-                    <option selected>Jawa Barat</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
+                <div className="input-group mb-3  ">
+                  {province && (
+                    <select
+                      className="form-select rounded-0 shadow-none"
+                      id="inputGroupSelect01"
+                      onChange={(e) => {
+                        setDataPost({ ...dataPost, delivery_province: e.target.value });
+                        setProvinceId(e.target.value);
+                      }}
+                    >
+                      <option selected disabled>
+                        Pilih provinsi
+                      </option>
+                      {province?.map((p, i) => (
+                        <option key={p.province_id} value={p.province_id}>
+                          {p.province}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               </div>
             </div>
@@ -94,13 +354,29 @@ export default function CheckoutDetailsComponent() {
                 <div className=" position-relative fw-bold mb-2">
                   Kota / Kabupaten <span className="position-absolute text-danger">*</span>
                 </div>
-                <div class="input-group mb-3  ">
-                  <select class="form-select rounded-0 shadow-none" id="inputGroupSelect01">
-                    <option selected>kab.Bogor</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
+                <div className="input-group mb-3  ">
+                  {city && (
+                    <select
+                      className="form-select rounded-0 shadow-none"
+                      id="inputGroupSelect02"
+                      onChange={(e) => {
+                        setDataPost({ ...dataPost, delivery_city: e.target.value });
+                        setCityId(e.target.value);
+                      }}
+                      disabled={dataPost.delivery_province === 0}
+                    >
+                      <option selected disabled>
+                        Pilih Kota / Kabupaten
+                      </option>
+                      {city?.map((c) => {
+                        return (
+                          <option key={c.city_id} value={c.city_id}>
+                            {c.city_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
                 </div>
               </div>
             </div>
@@ -109,12 +385,26 @@ export default function CheckoutDetailsComponent() {
                 <div className=" position-relative fw-bold mb-2">
                   Kecamataan <span className="position-absolute text-danger">*</span>
                 </div>
-                <div class="input-group mb-3  ">
-                  <select class="form-select rounded-0 shadow-none" id="inputGroupSelect01">
-                    <option selected>Tajurhalang</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <div className="input-group mb-3  ">
+                  <select
+                    className="form-select rounded-0 shadow-none"
+                    id="inputGroupSelect03"
+                    onChange={(e) => {
+                      setDataPost({ ...dataPost, delivery_district: e.target.value });
+                      setSubdistrictId(e.target.value);
+                    }}
+                    disabled={dataPost.delivery_city === 0}
+                  >
+                    <option selected disabled>
+                      Pilih Kecamatan
+                    </option>
+                    {subdistrict?.map((s) => {
+                      return (
+                        <option key={s.subdistrict_id} value={s.subdistrict_id}>
+                          {s.subdistrict_name}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
@@ -125,162 +415,24 @@ export default function CheckoutDetailsComponent() {
                   <label for="kodepos" className="form-label position-relative fw-bold">
                     Kode Pos<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="kodepos" placeholder="Kode Pos" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="kodepos" value={city.find((c) => c.city_id === dataPost.delivery_city)?.postal_code || ''} placeholder="Kode Pos" />
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col ">
                 <div className="mb-3">
-                  <label for="phone" className="form-label position-relative fw-bold">
+                  <label htmlFor="phone" className="form-label position-relative fw-bold">
                     Phone<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="phone" placeholder="No Phone" />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="phone" onChange={(e) => setDataPost({ ...dataPost, customer_phone: e.target.value, delivery_phone: e.target.value })} placeholder="No Phone" required />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-lg-6  ">
-          <div className="container  ">
-            <div className="border border-dark bg-light ms-4 ps-3 pe-3 pt-2">
-              <div className="ps-2 pe-2">
-                <div className="row mt-3 ">
-                  <div className=" mb-2 ">
-                    <h5 className="fw-bold fs-5">YOUR ORDER</h5>
-                  </div>
-                </div>
-                <div className="row ">
-                  <div className="border-bottom border-2 mb-3 pb-2">
-                    <div className="row">
-                      <div className="col-9 fw-bold">PRODUCT</div>
-                      <div className="col-3 fw-bold">SUBTOTAL</div>
-                    </div>
-                  </div>
-                  <div className="border-bottom border-1 mb-3 pb-2">
-                    <div className="row">
-                      <div className="col-9">Gamis Moderen</div>
-                      <div className="col-3 fw-bold ">Rp.200.000</div>
-                    </div>
-                  </div>
-                  <div className="border-bottom border-1 mb-3 pb-2">
-                    <div className="row">
-                      <div className="col-9 fw-bold">Subtotal</div>
-                      <div className="col-3 fw-bold">Rp.200.000</div>
-                    </div>
-                  </div>
-                  <div className="border-bottom border-1 mb-3 pb-2">
-                    <div className="row">
-                      <div className="col">
-                        <div className=" fw-bold mb-3">Shipping</div>
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked />
-                          <label className="form-check-label fw-bold" for="flexRadioDefault1">
-                            J&T Exspress : 10.000
-                          </label>
-                        </div>
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
-                          <label className="form-check-label" for="flexRadioDefault2">
-                            SiCepat : 12.000
-                          </label>
-                        </div>
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
-                          <label className="form-check-label" for="flexRadioDefault3">
-                            SiCepat : 18.000
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="border-bottom border-2 mb-3 pb-2">
-                    <div className="row">
-                      <div className="col-9 fw-bold">TOTAL</div>
-                      <div className="col-3 fw-bold">Rp.210.000</div>
-                    </div>
-                  </div>
-                  <div className="payment">
-                    <div className="row">
-                      <div className="col-9 ">
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="payment" id="payment1" checked />
-                          <label className="form-check-label " for="payment1">
-                            <div className="fw-bold"> Bayar Manual BCA</div>
-                            <div className="text-secondary fw-normal " style={{ fontSize: '12px' }}>
-                              ID pembelian anda akan muncul saat anda sudah memilih pembayaran dan melanjutkanya
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-3 text-end ">
-                        <img className="me-3 border border-secondary rounded-1 p-1" src="/images/logoBCA.png" alt="" />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-9 ">
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="payment" id="payment2" />
-                          <label className="form-check-label " for="payment2">
-                            <div> Bayar Dengan QRIS</div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-3 text-end ">
-                        <img className="me-3" src="/images/logoQRIS.png" alt="" />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-9 ">
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="payment" id="payment3" />
-                          <label className="form-check-label " for="payment3">
-                            <div> Bayar Dengan GoPay</div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-3 text-end ">
-                        <img className="me-3" src="/images/logoGoPay.png" alt="" />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-9 ">
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="payment" id="payment4" />
-                          <label className="form-check-label " for="payment4">
-                            <div> Bayar Dengan BNI</div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-3 text-end ">
-                        <img className="me-3" src="/images/logoBNI.png" alt="" />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-9 ">
-                        <div className="form-check mb-3">
-                          <input className="form-check-input" type="radio" name="payment" id="payment5" />
-                          <label className="form-check-label " for="payment5">
-                            <div> Bayar Dengan Mandiri</div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-3 text-end ">
-                        <img className="me-3" src="/images/logoMandiri.png" alt="" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row ms-2 ps-1  ">
-              <div>
-                <Link to="/product/payment-complite">
-                  <button className="btn btn-dark w-100 rounded-0">PAYMENT PROCEED</button>
-                </Link>
-              </div>
-            </div>
-          </div>
+        <div className="col-md-6">
+          <TotalDetail dataCart={listCart} ongkir={ongkir} setDataPost={setDataPost} handleFormSubmit={handleFormSubmit} />
         </div>
       </div>
     </div>
