@@ -209,13 +209,13 @@ export default function CheckoutDetailsComponent() {
       if (subdistrictId === 0) {
         return;
       } else {
-        const res = await apiLocation.get(`/ongkir?id=440&destination=${subdistrictId}&weight=${weight}`);
+        const res = await apiLocation.get(`/ongkir?id=${adressIdAsal}&destination=${subdistrictId}&weight=${weight}`);
         const dat = await res.data;
         setOngkir(dat.data);
       }
     };
     cekOngkir();
-  }, [subdistrictId, weight]);
+  }, [adressIdAsal, subdistrictId, weight]);
 
   // useEffect(() => {
   //     }, []);
