@@ -6,7 +6,7 @@ export default function Products({ products }) {
   return (
     <div>
       {' '}
-      <div className="row p-3">
+      <div className="row p-3 ">
         {products &&
           products.slice(0, 4).map((product) => (
             <div className=" col-6 col-lg-3 col-md-3  mb-4" key={product.id}>
@@ -19,7 +19,7 @@ export default function Products({ products }) {
                   <h5 className="card-title ">{product.name}</h5>
                   <p className="card-price">
                     <span className="strikethrough card-price-discount">
-                      {product.currency} {product.childs.price}
+                      {product.currency} {product.price}
                     </span>{' '}
                     <span className="text-red-100 fw-bold card-price-fix ">
                       {product.currency} {product.price}

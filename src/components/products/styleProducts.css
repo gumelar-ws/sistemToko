@@ -4,12 +4,19 @@
 }
 /* categori */
 .img-custom-cat {
-  width: 33rem !important ;
+  width: 26.5rem !important ;
   height: 20rem !important;
   object-fit: cover;
 }
 
 @media (max-width: 992px) {
+  .img-custom-cat {
+    width: 15rem !important ;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 567px) {
   .img-custom-cat {
     width: 10rem !important ;
     height: auto !important;

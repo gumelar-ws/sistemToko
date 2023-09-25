@@ -64,6 +64,10 @@
 .mx-custom {
   margin-right: 10px !important ;
 }
+
+.link-sorot:hover {
+  color: #e74c3c;
+}
 @media (max-width: 992px) {
   .border-md {
     border-top: 1px solid black;
@@ -80,6 +84,10 @@
   .toggler-icon {
     width: 25px;
     height: 2px;
+  }
+
+  .fs-sm-1 {
+    font-size: large !important;
   }
 }
 @media (min-width: 576px) {

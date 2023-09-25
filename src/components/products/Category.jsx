@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 export default function Category({ products }) {
   return (
     <div>
-      <div className=" p-3 position-relative w-auto d-flex overflow-x-scroll">
+      <div className=" p-3 pb-sm-0 position-relative w-auto d-flex overflow-x-scroll">
         {products &&
           products.map((product) => (
-            <div className="me-2 mb-4" key={product.id}>
+            <div className="me-2 " key={product.id}>
               <Link to={`product/Lates/${product.keywords[0].id}/none`}>
                 <div className="card">
                   <img src={product.photo} className="card-img-top img-custom-cat" alt={product.name} />

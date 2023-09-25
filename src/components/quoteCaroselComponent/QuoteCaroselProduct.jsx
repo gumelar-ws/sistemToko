@@ -15,11 +15,11 @@ export default function QuoteCaroselProduct() {
             <img src="images/gambar1.png" className="d-block  w-100 img " alt="..." />
             <div className="carousel-caption  d-md-block section-custom top-0 start-0 end-0 bottom-0">
               <div className="section-start text-start">
-                <span className="fw-bold fs-1 f-lobster">
+                <span className="fw-bold fs-1 f-lobster fws">
                   AGUSTUS <p>BIG SALE</p>
                 </span>
-                <p className="text-white fw-light">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
-                <span className="fw-bold fs-1 f-lobster">
+                <p className="text-white fw-light fws-sm">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
+                <span className="fw-bold fs-1 f-lobster fws">
                   JILBAB <p>100K</p>
                 </span>
               </div>
@@ -29,11 +29,11 @@ export default function QuoteCaroselProduct() {
             <img src="images/gambar1.png" className="d-block w-100 img" alt="..." />
             <div className="carousel-caption  d-md-block section-custom top-0 start-0 end-0 bottom-0">
               <div className="section-start text-start">
-                <span className="fw-bold fs-1 f-lobster">
+                <span className="fw-bold fs-1 f-lobster fws">
                   AGUSTUS <p>BIG SALE</p>
                 </span>
-                <p className="text-white fw-light">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
-                <span className="fw-bold fs-1 f-lobster">
+                <p className="text-white fw-light fws-sm">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
+                <span className="fw-bold fs-1 f-lobster fws">
                   JILBAB <p>100K</p>
                 </span>
               </div>
@@ -43,11 +43,11 @@ export default function QuoteCaroselProduct() {
             <img src="images/gambar1.png" className="d-block w-100 img " alt="..." />
             <div className="carousel-caption  d-md-block section-custom top-0 start-0 end-0 bottom-0">
               <div className="section-start text-start">
-                <span className="fw-bold fs-1 f-lobster">
+                <span className="fw-bold fs-1 f-lobster fws">
                   AGUSTUS <p>BIG SALE</p>
                 </span>
-                <p className="text-white fw-light">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
-                <span className="fw-bold fs-1 f-lobster">
+                <p className="text-white fw-light fws-sm">today is the right time to spend your money, increase your confidence with improve your hijab style and get rewards Today only! Don't miss it!</p>
+                <span className="fw-bold fs-1 f-lobster fws">
                   JILBAB <p>100K</p>
                 </span>
               </div>

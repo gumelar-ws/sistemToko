@@ -26,22 +26,22 @@ export default function NavbarComponent({ total }) {
           <a className="navbar-brand ps-3" href="/">
             <img src="images/logo.png" alt="logo" />
           </a>
-          {/* nav item bagian 1 */}
+          {/* nav item mobile */}
           <ul className="nav navigasi d-lg-none d-sm-flex d-md-flex mx-auto ">
             <li className="nav-item border-end">
               <Link className="nav-link active" aria-current="page" onClick={toggleSerch}>
-                <i className="bi bi-search text-dark "></i>
+                <i className="bi bi-search text-dark fs-sm-1"></i>
               </Link>
             </li>
             <li className="nav-item border-end">
               <a className="nav-link text-dark  " href="/">
-                <span className="text-sm-none"> LOGIN</span> <i className="bi bi-person text-md-none"></i>
+                <span className="text-sm-none link-sorot"> LOGIN</span> <i className="bi bi-person text-md-none fs-sm-1 "></i>
               </a>
             </li>
             <li className="nav-item">
               <Link to="/product/shoppingCart" className="nav-link text-dark ">
-                <span className="text-sm-none">CART</span>
-                <span className="fw-bold text-sm-none">{total}</span> <i className="bi bi-cart3"></i>
+                <span className="text-sm-none link-sorot">CART</span>
+                <span className="fw-bold text-sm-none">{total}</span> <i className="bi bi-cart3 fs-sm-1"></i>
               </Link>
             </li>
           </ul>
@@ -53,31 +53,29 @@ export default function NavbarComponent({ total }) {
           <div className="collapse navbar-collapse " id="navbarNav">
             <ul className="navbar-nav p-2  border-md">
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle  text-dark " href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a className="nav-link dropdown-toggle  text-dark link-sorot" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   SHOP
                 </a>
                 <ul className="dropdown-menu">
                   <li>
-                    <Link className="dropdown-item" to="/product/Lates/all/none">
+                    <Link className="dropdown-item link-sorot" to="/product/Lates/all/none">
                       Products List
                     </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="/">
+                    <a className="dropdown-item  link-sorot" href="/">
                       T-Shirt
                     </a>
                   </li>
                 </ul>
               </li>
               <li className="nav-item">
-                <a className="nav-link  text-dark " href="/">
+                <a className="nav-link  text-dark link-sorot " href="/">
                   PAYMENT CONFIRMATION
                 </a>
               </li>
-              <li className="nav-item">
-                <Link to="/product/checkout-detail" className="nav-link  text-dark ">
-                  TRACK YOUR ORDER
-                </Link>
+              <li className="nav-item ">
+                <span className="nav-link  text-dark link-sorot">TRACK YOUR ORDER</span>
               </li>
             </ul>
             {/* nav item bagian 2 */}
@@ -88,13 +86,15 @@ export default function NavbarComponent({ total }) {
                 </Link>
               </li>
               <li className="nav-item border-end">
-                <a className="nav-link  text-dark " href="/">
+                <a className="nav-link  text-dark link-sorot" href="/">
                   LOGIN
                 </a>
               </li>
               <li className="nav-item">
-                <Link to="/product/shoppingCart" className="nav-link text-dark ">
-                  CART <span className="fw-bold">{total}</span> <i className="bi bi-cart3"></i>
+                <Link to="/product/shoppingCart">
+                  <span className="nav-link text-dark link-sorot">
+                    CART <span className="fw-bold">{total}</span> <i className="bi bi-cart3"></i>
+                  </span>
                 </Link>
               </li>
             </ul>
