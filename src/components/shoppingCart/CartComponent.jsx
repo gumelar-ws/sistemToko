@@ -64,7 +64,7 @@ export default function CartComponent({ setTotals }) {
   const removeCartHandler = (item) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
   };
-
+  console.log('list cart', listCart);
   return (
     <div>
       <div className="row parent ">
@@ -77,7 +77,9 @@ export default function CartComponent({ setTotals }) {
             </div>
           </div>
           <div className="pe-3">
-            {listCart &&
+            {!listCart || listCart.length === 0 ? (
+              <p className="text-success">Tidak Ada Products yang di pilih!</p>
+            ) : (
               listCart.map((list) => {
                 const totalCount = formatNumberWithCommas(parseInt(formatStringPrice(list)) * list.product_qty);
                 return (
@@ -103,7 +105,8 @@ export default function CartComponent({ setTotals }) {
                     <div className="col-3 fs-6 fw-bold">Rp.{totalCount}</div>
                   </div>
                 );
-              })}
+              })
+            )}
           </div>
           <div className="row pt-2 ">
             <Link to="/product/Lates/all/none">

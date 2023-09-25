@@ -5,6 +5,8 @@ import LineText from '../lineText/LineText';
 import { useNavigate, useParams } from 'react-router-dom';
 import DetaileImage from './childs/DetaileImage';
 import RelateProduct from './childs/RelateProduct';
+import LoadingPage from '../loadingBox/LoadingPage';
+import LoadingButton from '../loadingBox/LoadingButton';
 
 export default function DetailComponent() {
   const { name } = useParams();
@@ -14,6 +16,7 @@ export default function DetailComponent() {
   const [detailProductParent, setDetailProductParent] = useState({});
   const [detailProductChilds, setDetailProductChilds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -95,6 +98,7 @@ export default function DetailComponent() {
   const cart = useSelector((state) => state.cart.cart);
 
   const handleAddToCart = async () => {
+    setLoadingBtn(true);
     const existItem = cart.cartItems.find((x) => x.product_id === selectedProduct.id);
     const product_qty = existItem ? existItem.product_qty + count : 1;
     const newData = {
@@ -107,6 +111,7 @@ export default function DetailComponent() {
     };
     if (selectedProduct.stock < product_qty) {
       window.alert('Sorry gays product habis !');
+      setLoadingBtn(false);
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...newData, product_qty } });
@@ -125,12 +130,11 @@ export default function DetailComponent() {
     };
     fetchMetchData();
   }, [selectedKeywordId]);
-  console.log(detailProduct);
 
   return (
     <div>
       {loading ? (
-        <p className="text-center">Loading...</p>
+        <LoadingPage />
       ) : error ? (
         <p className="text-center">Error: {error.message}</p>
       ) : (
@@ -192,7 +196,7 @@ export default function DetailComponent() {
                               </li>
                               <li className="page-item">
                                 <span className="page-link btn btn-secondary bg-secondary text-white rounded-0 " style={{ cursor: 'pointer' }} onClick={handleAddToCart}>
-                                  Add to Cart
+                                  {loadingBtn ? <LoadingButton /> : 'Add to Cart'}
                                 </span>
                               </li>
                             </ul>

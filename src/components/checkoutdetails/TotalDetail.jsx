@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import LoadingButton from '../loadingBox/LoadingButton';
 // import { useNavigate } from 'react-router-dom';
 
-export default function TotalDetail({ dataCart, ongkir, setDataPost, handleFormSubmit }) {
+export default function TotalDetail({ dataCart, ongkir, setDataPost, handleFormSubmit, loadingBtn }) {
   // const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState('');
   const [radioChecked, setRadioChecked] = useState('');
@@ -226,7 +227,7 @@ export default function TotalDetail({ dataCart, ongkir, setDataPost, handleFormS
         <div className="row ms-2 ps-1  ">
           <div>
             <button type="submit" className="btn btn-dark w-100 rounded-0" onClick={handleFormSubmit} disabled={selectedValue === ''}>
-              PAYMENT PROCEED
+              PAYMENT PROCEED{loadingBtn ? <LoadingButton /> : ''}
             </button>
           </div>
         </div>

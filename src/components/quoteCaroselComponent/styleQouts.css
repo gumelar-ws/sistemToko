@@ -1,6 +1,3 @@
-/* .section-custom {
-  background-color: blue;
-} */
 .section-custom .section-start {
   position: relative;
   top: 25%;
@@ -14,10 +11,10 @@
 }
 
 @media (max-width: 576px) {
-  .carousel-item .img {
+  /* .carousel-item .img {
     height: 70vh;
     object-fit: cover;
-  }
+  } */
   .section-custom .section-start {
     width: 290px;
     font-size: 12px;

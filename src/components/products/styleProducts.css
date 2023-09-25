@@ -2,3 +2,16 @@
   text-decoration: line-through;
   color: #ccc; /* Pale color for strikethrough */
 }
+/* categori */
+.img-custom-cat {
+  width: 33rem !important ;
+  height: 20rem !important;
+  object-fit: cover;
+}
+
+@media (max-width: 992px) {
+  .img-custom-cat {
+    width: 10rem !important ;
+    height: auto !important;
+  }
+}

@@ -5,6 +5,7 @@ import QuoteCaroselProduct from '../components/quoteCaroselComponent/QuoteCarose
 import LineText from '../components/lineText/LineText';
 import Products from '../components/products/Products';
 import Category from '../components/products/Category';
+import LoadingPage from '../components/loadingBox/LoadingPage';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -14,20 +15,28 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [productAll, setProductAll] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [perPage, setPerPage] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const data = async () => {
       try {
         const res = await api.get('/product');
         setProducts(res.data.aaData);
+        setPerPage(res.data.per_page);
+        setTotal(res.data.total);
         setLoading(false);
       } catch (error) {
         setLoading(false);
         setError(error);
       }
     };
+
     const featuredFetch = async () => {
       const respon = await api.get('/categories');
+      setCategories(respon.data.aaData);
 
       setKey(respon.data.aaData.map((v) => v.keyword_id));
     };
@@ -39,6 +48,32 @@ export default function Home() {
       setCurrentIndex(parseInt(savedIndex, 10));
     }
   }, []);
+
+  useEffect(() => {
+    const FetchProductAll = async () => {
+      const totalPages = Math.ceil(total / perPage);
+      const allProducts = [];
+
+      for (let page = 1; page <= totalPages; page++) {
+        try {
+          const response = await api.get(`/product?page=${page}`);
+          allProducts.push(...response.data.aaData);
+        } catch (error) {
+          console.error('Error fetching produk data:', error);
+        }
+      }
+
+      setLoading(false);
+      const produkTerpilih = categories.map((kategori) => {
+        const produkKategori = allProducts.find((produk) => produk.keywords[0].id === kategori.keyword_id);
+        return produkKategori;
+      });
+
+      setProductAll(produkTerpilih);
+    };
+    FetchProductAll();
+  }, [perPage, total, categories]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (key.length > 0) {
@@ -56,11 +91,8 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [currentIndex, key]);
 
-  console.log(currentIndex);
-  console.log('cat', cat);
+  // const f = products.filter((v) => v.keywords[0].id === cat);
 
-  const f = products.filter((v) => v.keywords[0].id === cat);
-  console.log('f', f);
   useEffect(() => {
     const f = async () => {
       try {
@@ -72,21 +104,17 @@ export default function Home() {
     };
     f();
   }, [cat]);
-
-  // const sortProductsByDate = (a, b) => new Date(b.childs[0].updated_at.date) - new Date(a.childs[0].updated_at.date);
-  // const sortedProducts = [...products].sort(sortProductsByDate);
-
   return (
     <div>
       <XpdcBaner />
       <QuoteCaroselProduct />
       {loading ? (
-        <p className="text-center">loading...</p>
+        <LoadingPage />
       ) : error ? (
         <p className="text-center">{error.message}</p>
       ) : products && products.length ? (
         <>
-          <Category products={products} />
+          {!productAll || productAll[0] === undefined ? <LoadingPage /> : <Category products={productAll} />}
           <LineText textLine="FEATURED PRODUCT" line="line" />
           <Products products={featured} number={0} />
           <LineText textLine="NEW ARIVAL" line="line" />

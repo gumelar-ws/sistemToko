@@ -6,7 +6,7 @@ export default function FooterComponent({ config, user }) {
     <div>
       {' '}
       <div className="container">
-        <div className="row p-5 ">
+        <div className="row p-md-5 p-sm-1 ">
           <div className="col-md-4 col-sm-6">
             <h5>Help</h5>
             <ul className="list-unstyled">

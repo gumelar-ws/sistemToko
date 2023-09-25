@@ -5,6 +5,7 @@ import ProductList from '../components/componentProductList/ProductList';
 import { useNavigate, useParams } from 'react-router-dom';
 import HederPathProductList from '../components/componentProductList/HederPathProductList';
 import BtnViewMore from '../components/componentProductList/BtnViewMore.jsx';
+import LoadingPage from '../components/loadingBox/LoadingPage';
 
 export default function ProdouctsList() {
   const { sorting, categories, search_name } = useParams();
@@ -12,8 +13,9 @@ export default function ProdouctsList() {
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  const [error, setError] = useState('');
   const [pages, setPages] = useState(1);
   const [prevSearchName, setPrevSearchName] = useState(search_name);
   const [hasMore, setHasMore] = useState(true);
@@ -23,6 +25,7 @@ export default function ProdouctsList() {
   // const [sisa, setSisa] = useState(0);
 
   const loadProducts = async (pagesNumber, sort, categori, search) => {
+    setIsLoadingMore(true);
     try {
       const response = await api.get(`/product?page=${pagesNumber}&sorting=${sort}&categories=${categori}&search_name=${search}`);
       const newProducts = response.data.aaData;
@@ -49,6 +52,8 @@ export default function ProdouctsList() {
       }
 
       setLoading(false);
+
+      setIsLoadingMore(false);
     } catch (error) {
       setError('Terjadi kesalahan saat memuat produk.');
       setLoading(false);
@@ -66,15 +71,17 @@ export default function ProdouctsList() {
   }, [pages, hasMore, sorting, categories, search_name, navigate, prevSearchName]);
 
   const loadMore = () => {
+    setIsLoadingMore(true);
     setPages(pages + 1);
+    setIsLoadingMore(false);
   };
-console.log(products)
+  console.log(products);
   return (
     <div>
       {loading ? (
-        <p className="text-center text-success">Sedang memuat produk...</p>
+        <LoadingPage />
       ) : error ? (
-        <p>{error}</p>
+        <p className="text-danger">{error}</p>
       ) : (
         <div>
           <HederPathProductList
@@ -92,8 +99,8 @@ console.log(products)
             content4Style="d-none"
             content5Style="d-none"
           />
-          <ProductList products={products} />
-          {hasMore && <BtnViewMore onClick={loadMore} />}
+          {products ? <ProductList products={products} /> : <p className="text-danger text-center mt-3">Products Not Found!</p>}
+          {hasMore && <BtnViewMore onClick={loadMore} isLoadingMore={isLoadingMore} />}
         </div>
       )}
     </div>

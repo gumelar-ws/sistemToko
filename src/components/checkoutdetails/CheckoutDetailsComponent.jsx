@@ -10,9 +10,7 @@ export default function CheckoutDetailsComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const listCart = useSelector((state) => state.cart.cart.cartItems);
-  if (!listCart) {
-    navigate('/product/:sorting/:categories/:search_name');
-  }
+
   const [province, setProvince] = useState([]);
   const [provinceId, setProvinceId] = useState(0);
   const [city, setCity] = useState([]);
@@ -22,6 +20,8 @@ export default function CheckoutDetailsComponent() {
   const [weight, setWeight] = useState(200);
   const [adressIdAsal, setAdressIdAsal] = useState(0);
   const [ongkir, setOngkir] = useState([]);
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  const [noHp, setNoHp] = useState(0);
 
   const [namaDepan, setNamaDepan] = useState('');
   const [namaBelakang, setNamaBelakang] = useState('');
@@ -102,9 +102,16 @@ export default function CheckoutDetailsComponent() {
 
     if (!dataPost.customer_name) {
       isValid = false;
-      errors.customer_name = 'Nama pelanggan harus diisi.';
+      errors.customer_name = 'Nama depan harus diisi.';
     } else {
       errors.customer_name = '';
+    }
+
+    if (!dataPost.delivery_address) {
+      isValid = false;
+      errors.delivery_address = 'Alamat pengiriman harus diisi.';
+    } else {
+      errors.delivery_address = '';
     }
 
     if (!dataPost.customer_phone) {
@@ -114,11 +121,16 @@ export default function CheckoutDetailsComponent() {
       errors.customer_phone = '';
     }
 
+    if (errors) {
+      setLoadingBtn(false);
+    }
+
     setInputValidation({
       ...inputValidation,
       customer_email: isValid,
       customer_name: isValid,
       customer_phone: isValid,
+      delivery_address: isValid,
     });
 
     setErrorMessage(errors);
@@ -145,6 +157,7 @@ export default function CheckoutDetailsComponent() {
         const toko = await res.data.data.user;
 
         setAdressIdAsal(resId.config_user_id);
+        setNoHp(resId.config_wa);
         setDataPost((prevData) => ({
           ...prevData,
           permalink: toko.user_permalink,
@@ -158,11 +171,13 @@ export default function CheckoutDetailsComponent() {
   }, []);
 
   useEffect(() => {
+    const concatName = namaDepan + namaBelakang;
+    const concatAdress = deliveryAddress.regrency + deliveryAddress.detail;
     setDataPost((prevData) => ({
       ...prevData,
-      customer_name: namaDepan + ' ' + namaBelakang,
-      delivery_from_name: namaDepan + ' ' + namaBelakang,
-      delivery_address: deliveryAddress.regrency + ' ,' + deliveryAddress.detail,
+      customer_name: concatName,
+      delivery_from_name: concatName,
+      delivery_address: concatAdress,
     }));
   }, [namaDepan, namaBelakang, deliveryAddress]);
 
@@ -221,26 +236,33 @@ export default function CheckoutDetailsComponent() {
     cekOngkir();
   }, [adressIdAsal, subdistrictId, weight]);
 
-  // useEffect(() => {
-  //     }, []);
-  // console.log('ongkir', ongkir);
   console.log('data', dataPost);
-  // console.log('tes', tes);
 
   const handleFormSubmit = async () => {
+    setLoadingBtn(true);
     try {
       const isValid = validateInputs();
       const data = JSON.stringify(dataPost);
-      console.log('v', data);
       if (isValid) {
         const response = await axios.post('https://hijja.sistemtoko.com/public/hijja/web_order', data, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' } });
 
         console.log('Respon:', response.data);
-        dispatch({ type: 'CART_CLEAR' });
-        window.location.href = `https://hijja.sistemtoko.com/i/${response.data.order_code}`;
+
+        if (response.data.status === false) {
+          setLoadingBtn(false);
+          window.alert(`Setelah kami cek Product Habis Silahkan untuk Membeli Product Lain di list Product kami, atau Hubungi di Nomer WA ini untuk ketersedian product ${noHp} `);
+          dispatch({ type: 'CART_CLEAR' });
+          localStorage.removeItem('cartItems');
+          navigate('/product/Lates/all/none');
+        } else {
+          dispatch({ type: 'CART_CLEAR' });
+          localStorage.removeItem('cartItems');
+          window.location.href = `https://hijja.sistemtoko.com/i/${response.data.order_code}`;
+        }
       }
     } catch (error) {
       console.error('Kesalahan:', error);
+      setLoadingBtn(false);
     }
   };
 
@@ -276,7 +298,15 @@ export default function CheckoutDetailsComponent() {
                   <label htmlFor="first" className="form-label position-relative fw-bold">
                     First Name <span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="first" onChange={(e) => setNamaDepan(e.target.value)} placeholder="Nama depan" required />
+                  <input
+                    type="text"
+                    className={`form-control rounded-0 shadow-none ${!inputValidation.customer_name ? 'border border-danger' : ''}`}
+                    id="first"
+                    onChange={(e) => setNamaDepan(e.target.value)}
+                    placeholder="Nama depan"
+                    required
+                  />
+                  {!inputValidation.customer_name ? <p className="text-danger ">{errorMessage.customer_name}</p> : ''}
                 </div>
               </div>
               <div className="col ">
@@ -284,7 +314,7 @@ export default function CheckoutDetailsComponent() {
                   <label htmlFor="last" className="form-label position-relative fw-bold">
                     Last Name <span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="last" onChange={(e) => setNamaBelakang(e.target.value)} placeholder="Nama Belakang" required />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="last" onChange={(e) => setNamaBelakang(' ' + e.target.value)} placeholder="Nama Belakang" required />
                 </div>
               </div>
             </div>
@@ -314,7 +344,14 @@ export default function CheckoutDetailsComponent() {
                   <label htmlFor="street" className="form-label position-relative fw-bold">
                     Street address<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none " id="street" placeholder="Jakarta Regrency" onChange={(e) => setDeliveryAddress({ ...deliveryAddress, regrency: e.target.value })} />
+                  <input
+                    type="text"
+                    className={`form-control rounded-0 shadow-none ${!inputValidation.delivery_address ? 'border border-danger' : ''}`}
+                    id="street"
+                    placeholder="Jakarta Regrency"
+                    onChange={(e) => setDeliveryAddress({ ...deliveryAddress, regrency: e.target.value })}
+                  />
+                  {!inputValidation.delivery_address ? <p className="text-danger">{errorMessage.delivery_address}</p> : ''}
                 </div>
               </div>
               <div className="col ">
@@ -322,7 +359,7 @@ export default function CheckoutDetailsComponent() {
                   <label htmlFor="street2" className="form-label position-relative opacity-0 ">
                     Setreet Adress<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="street2" placeholder="Apartement,suite,unit(opsional)" onChange={(e) => setDeliveryAddress({ ...deliveryAddress, detail: e.target.value })} />
+                  <input type="text" className="form-control rounded-0 shadow-none" id="street2" placeholder="Apartement,suite,unit(opsional)" onChange={(e) => setDeliveryAddress({ ...deliveryAddress, detail: ',' + e.target.value })} />
                 </div>
               </div>
             </div>
@@ -430,14 +467,22 @@ export default function CheckoutDetailsComponent() {
                   <label htmlFor="phone" className="form-label position-relative fw-bold">
                     Phone<span className=" position-absolute text-danger ">*</span>
                   </label>
-                  <input type="text" className="form-control rounded-0 shadow-none" id="phone" onChange={(e) => setDataPost({ ...dataPost, customer_phone: e.target.value, delivery_phone: e.target.value })} placeholder="No Phone" required />
+                  <input
+                    type="text"
+                    className={`form-control rounded-0 shadow-none ${!inputValidation.customer_phone ? 'border border-danger' : ''}`}
+                    id="phone"
+                    onChange={(e) => setDataPost({ ...dataPost, customer_phone: e.target.value, delivery_phone: e.target.value })}
+                    placeholder="No Phone"
+                    required
+                  />
+                  {!inputValidation.customer_phone ? <p className="text-danger">{errorMessage.customer_phone}</p> : ''}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-6">
-          <TotalDetail dataCart={listCart} ongkir={ongkir} setDataPost={setDataPost} handleFormSubmit={handleFormSubmit} />
+          <TotalDetail dataCart={listCart} ongkir={ongkir} setDataPost={setDataPost} handleFormSubmit={handleFormSubmit} loadingBtn={loadingBtn} />
         </div>
       </div>
     </div>
