@@ -68,17 +68,10 @@ export default function TotalDetail({ dataCart, ongkir, setDataPost, handleFormS
     setDataPost((prevData) => ({ ...prevData, expedition_code: radioChecked, expedition_service: selectedValue, expedition_weight: selectedValue, expedition: radioChecked }));
   }, [setDataPost, radioChecked, selectedValue]);
 
-  // const handelPay = () => {
-  //   navigate('/product/payment-complite');
-  // };
-
-  console.log('value', selectedValue);
-  console.log('radio', radioChecked);
-
   return (
     <div>
       <div className="container  ">
-        <div className="border border-dark bg-light ms-4 ps-3 pe-3 pt-2">
+        <div className="border border-dark bg-light  ps-3 pe-3 pt-2">
           <div className="ps-2 pe-2">
             <div className="row mt-3 ">
               <div className=" mb-2 ">
@@ -224,9 +217,9 @@ export default function TotalDetail({ dataCart, ongkir, setDataPost, handleFormS
             </div>
           </div>
         </div>
-        <div className="row ms-2 ps-1  ">
+        <div className="row   ">
           <div>
-            <button type="submit" className="btn btn-dark w-100 rounded-0" onClick={handleFormSubmit} disabled={selectedValue === ''}>
+            <button type="submit" className="btn btn-dark w-100 rounded-0" onClick={handleFormSubmit} disabled={selectedValue === '' || !dataCart || dataCart.length === 0}>
               PAYMENT PROCEED{loadingBtn ? <LoadingButton /> : ''}
             </button>
           </div>

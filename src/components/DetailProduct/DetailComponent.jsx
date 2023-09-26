@@ -196,7 +196,7 @@ export default function DetailComponent() {
                               </li>
                               <li className="page-item">
                                 <span className="page-link btn btn-secondary bg-secondary text-white rounded-0 " style={{ cursor: 'pointer' }} onClick={handleAddToCart}>
-                                  {loadingBtn ? <LoadingButton /> : 'Add to Cart'}
+                                  Add to Cart{loadingBtn ? <LoadingButton /> : ''}
                                 </span>
                               </li>
                             </ul>

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './styleCart.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingButton from '../loadingBox/LoadingButton';
 
 export default function CartComponent({ setTotals }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const listCart = useSelector((state) => state.cart.cart.cartItems);
   const [subTotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [vocer, setVocer] = useState('');
   const [hemat, setHemat] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function formatNumberWithCommas(number) {
     return number.toLocaleString('id-ID');
@@ -65,6 +68,11 @@ export default function CartComponent({ setTotals }) {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
   };
   console.log('list cart', listCart);
+  const handelCekout = () => {
+    setLoading(true);
+    navigate('/product/checkout-detail');
+    setLoading(false);
+  };
   return (
     <div>
       <div className="row parent ">
@@ -147,9 +155,9 @@ export default function CartComponent({ setTotals }) {
             </div>
             <div className="mt-2 mb-2 pb-2">
               <div className="row">
-                <Link to="/product/checkout-detail">
-                  <button className="btn btn-dark w-100 rounded-0">PROCEED TO CHECKOUT</button>
-                </Link>
+                <button className="btn btn-dark w-100 rounded-0" onClick={handelCekout} disabled={!listCart || listCart.length === 0}>
+                  PROCEED TO CHECKOUT {loading ? <LoadingButton /> : ''}
+                </button>
               </div>
             </div>
             <div className="border-bottom border-1 mt-4 mb-3 pb-2">

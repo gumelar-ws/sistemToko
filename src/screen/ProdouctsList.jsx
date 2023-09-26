@@ -73,7 +73,6 @@ export default function ProdouctsList() {
   const loadMore = () => {
     setIsLoadingMore(true);
     setPages(pages + 1);
-    setIsLoadingMore(false);
   };
   console.log(products);
   return (

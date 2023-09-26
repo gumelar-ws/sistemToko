@@ -236,18 +236,16 @@ export default function CheckoutDetailsComponent() {
     cekOngkir();
   }, [adressIdAsal, subdistrictId, weight]);
 
-  console.log('data', dataPost);
+  // const [statusSubmit, setStatusSubmit] = useState('');
 
   const handleFormSubmit = async () => {
-    setLoadingBtn(true);
     try {
       const isValid = validateInputs();
       const data = JSON.stringify(dataPost);
       if (isValid) {
+        setLoadingBtn(true);
         const response = await axios.post('https://hijja.sistemtoko.com/public/hijja/web_order', data, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' } });
-
-        console.log('Respon:', response.data);
-
+        // setStatusSubmit(response.data.status);
         if (response.data.status === false) {
           setLoadingBtn(false);
           window.alert(`Setelah kami cek Product Habis Silahkan untuk Membeli Product Lain di list Product kami, atau Hubungi di Nomer WA ini untuk ketersedian product ${noHp} `);
@@ -265,8 +263,11 @@ export default function CheckoutDetailsComponent() {
       setLoadingBtn(false);
     }
   };
-
-  console.log(weight);
+  // useEffect(() => {
+  //   if (listCart.length === 0 && !statusSubmit) {
+  //     navigate('/');
+  //   }
+  // }, [listCart, statusSubmit, navigate]);
 
   return (
     <div>
@@ -481,7 +482,7 @@ export default function CheckoutDetailsComponent() {
             </div>
           </div>
         </div>
-        <div className="col-md-6">
+        <div className="col-lg-6">
           <TotalDetail dataCart={listCart} ongkir={ongkir} setDataPost={setDataPost} handleFormSubmit={handleFormSubmit} loadingBtn={loadingBtn} />
         </div>
       </div>

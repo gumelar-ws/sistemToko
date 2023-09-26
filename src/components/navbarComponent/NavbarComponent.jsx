@@ -53,8 +53,8 @@ export default function NavbarComponent({ total }) {
           <div className="collapse navbar-collapse " id="navbarNav">
             <ul className="navbar-nav p-2  border-md">
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle  text-dark link-sorot" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  SHOP
+                <a className="nav-link dropdown-toggle  text-dark " href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span className="link-sorot">SHOP</span>
                 </a>
                 <ul className="dropdown-menu">
                   <li>
@@ -70,29 +70,33 @@ export default function NavbarComponent({ total }) {
                 </ul>
               </li>
               <li className="nav-item">
-                <a className="nav-link  text-dark link-sorot " href="/">
-                  PAYMENT CONFIRMATION
+                <a className="nav-link  text-dark  " href="/">
+                  <span className="link-sorot">PAYMENT CONFIRMATION</span>
                 </a>
               </li>
               <li className="nav-item ">
-                <span className="nav-link  text-dark link-sorot">TRACK YOUR ORDER</span>
+                <a className="nav-link  text-dark " href="/">
+                  <span className="link-sorot">TRACK YOUR ORDER</span>
+                </a>
               </li>
             </ul>
             {/* nav item bagian 2 */}
             <ul className=" navbar-nav mx-auto mx-custom d-none d-md-none  d-lg-flex ">
               <li className="nav-item border-end">
                 <Link className="nav-link  " onClick={toggleSerch}>
-                  <i className="bi bi-search text-dark fw-bold"></i>
+                  <span className="link-sorot">
+                    <i className="bi bi-search text-dark fw-bold "></i>
+                  </span>
                 </Link>
               </li>
               <li className="nav-item border-end">
-                <a className="nav-link  text-dark link-sorot" href="/">
-                  LOGIN
+                <a className="nav-link  text-dark " href="/">
+                  <span className="link-sorot">LOGIN</span>
                 </a>
               </li>
               <li className="nav-item">
-                <Link to="/product/shoppingCart">
-                  <span className="nav-link text-dark link-sorot">
+                <Link to="/product/shoppingCart " className="nav-link text-dark">
+                  <span className=" link-sorot">
                     CART <span className="fw-bold">{total}</span> <i className="bi bi-cart3"></i>
                   </span>
                 </Link>
